@@ -1,10 +1,10 @@
-<!-- ../view/add.php -->
 <?php
 // Ensure error reporting is enabled for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Include necessary files
+include_once('../model/database.php');
 include_once('../model/item_db.php');
 include_once('../model/category_db.php');
 
@@ -13,10 +13,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']) && isset($_PO
     // Extract form data
     $title = $_POST['title'];
     $description = $_POST['description'];
-    $category_id = $_POST['category_id'];
+    
+    // Check if category_id is set
+    $category_id = isset($_POST['category_id']) ? $_POST['category_id'] : null;
+
+    // Check if new_category is set
+    $new_category = isset($_POST['new_category']) ? $_POST['new_category'] : null;
 
     // Validate and sanitize input
     try {
+        // Check if a new category is provided
+        if (!empty($new_category)) {
+            // Insert a new category
+            addCategory($GLOBALS['conn'], $new_category);
+
+            // Fetch the newly added category ID
+            $category = getCategoryByName($GLOBALS['conn'], $new_category);
+            $category_id = $category['category_id'];
+        }
+
         // Insert into the database
         addToDoItem($GLOBALS['conn'], $title, $description, $category_id);
 
@@ -28,6 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']) && isset($_PO
         exit();
     }
 }
+
+// Fetch categories for dropdown menu
+$categories = getCategories($GLOBALS['conn']);
 ?>
 
 <!DOCTYPE html>
@@ -50,14 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']) && isset($_PO
         <textarea id="description" name="description" required></textarea>
         <br>
 
-        <label for="category_id">Category:</label>
-        <select name="category_id" id="category_id">
-            <?php foreach ($categories as $category) : ?>
-                <option value="<?php echo $category['categoryID']; ?>">
-                    <?php echo $category['categoryName']; ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" required>
         <br>
 
         <button type="submit">Add Item</button>

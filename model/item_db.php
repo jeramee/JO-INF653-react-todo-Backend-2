@@ -1,16 +1,18 @@
 <!-- ../model/item_db.php -->
 <?php
 
-function getToDoItems($db, $category_id = null) {
+include("database.php");
+
+function getToDoItems($conn, $category_id = null) {
     $query = 'SELECT todoitems.*, categories.categoryName 
               FROM todoitems 
-              LEFT JOIN categories ON todoitems.categoryID = categories.categoryID';
+              LEFT JOIN categories ON todoitems.category_id = categories.category_id';
               
     if ($category_id !== null) {
-        $query .= ' WHERE todoitems.categoryID = :category_id';
+        $query .= ' WHERE todoitems.category_id = :category_id';
     }
 
-    $statement = $db->prepare($query);
+    $statement = $conn->prepare($query);
     
     if ($category_id !== null) {
         $statement->bindValue(':category_id', $category_id);
@@ -23,25 +25,23 @@ function getToDoItems($db, $category_id = null) {
     return $results;
 }
 
-function addToDoItem($db, $title, $description, $category_id) {
-    include("database.php");
-
-    $query = 'INSERT INTO todoitems (Title, Description, categoryID) 
+function addToDoItem($conn, $title, $description, $category_id) {
+    $query = 'INSERT INTO todoitems (Title, Description, category_id) 
               VALUES (:title, :description, :category_id)';
     
-    $statement = $db->prepare($query);
-    $statement->bindValue(":title", $title);
-    $statement->bindValue(":description", $description);
-    $statement->bindValue(":category_id", $category_id);
+    $statement = $conn->prepare($query);
+    $statement->bindParam(":title", $title);
+    $statement->bindParam(":description", $description);
+    $statement->bindParam(":category_id", $category_id, PDO::PARAM_INT);
     $statement->execute();
     $statement->closeCursor();
 }
 
-function removeToDoItem($db, $itemNum) {
+function removeToDoItem($conn, $itemNum) {
     $query = 'DELETE FROM todoitems WHERE ItemNum = :itemNum';
     
-    $statement = $db->prepare($query);
-    $statement->bindValue(":itemNum", $itemNum);
+    $statement = $conn->prepare($query);
+    $statement->bindParam(":itemNum", $itemNum, PDO::PARAM_INT);
     $statement->execute();
     $statement->closeCursor();
 }

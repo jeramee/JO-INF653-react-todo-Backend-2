@@ -6,9 +6,9 @@
         <select name="category_id" id="category_id">
             <option value="">All Categories</option>
             <?php foreach ($categories as $category) : ?>
-                <option value="<?php echo $category['categoryID']; ?>" 
-                    <?php if ($category['categoryID'] == $category_id) echo 'selected'; ?>>
-                    <?php echo $category['categoryName']; ?>
+                <option value="<?php echo $category['category_id']; ?>" 
+                    <?php if ($category['category_id'] == $category_id) echo 'selected'; ?>>
+                    <?php echo $category['category_name']; ?>
                 </option>
             <?php endforeach; ?>
         </select>
@@ -19,7 +19,7 @@
             <?php foreach ($toDoItems as $item) : ?>
                 <li>
                     <?php echo $item['Title']; ?> - <?php echo $item['Description']; ?>
-                    (Category: <?php echo $item['categoryName'] ? $item['categoryName'] : 'None'; ?>)
+                    (Category: <?php echo $item['category_name'] ? $item['category_name'] : 'None'; ?>)
                     <a href='controller/index.php?action=remove&id=<?php echo $item['ItemNum']; ?>'>Remove</a>
                 </li>
             <?php endforeach; ?>

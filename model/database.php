@@ -1,17 +1,22 @@
 <!-- ../model/database.php -->
 <?php
 
-$dsn = "mysql:host=localhost;dbname=todolist";
-$username = 'root';
-// $password = '1qaz';
+if (!function_exists('connectToDatabase')) {
+    function connectToDatabase() {
+        $dsn = "mysql:host=localhost;dbname=todolist";
+        $username = 'root';
+        // $password = '1qaz';
 
-try {
-    // Use the same $username and $password for both databases
-    $GLOBALS['conn'] = new PDO($dsn, $username);
-    //$GLOBALS['conn'] = new PDO($dsn, $username, $password);
-    $GLOBALS['conn']->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-    exit();
+        try {
+            $conn = new PDO($dsn, $username);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $conn;
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+            exit();
+        }
+    }
 }
-?>
+
+// Usage in other files:
+$conn = connectToDatabase();
