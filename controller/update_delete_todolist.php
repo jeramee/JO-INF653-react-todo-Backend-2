@@ -1,5 +1,5 @@
 <!-- update_delete_todolist.php -->
-<?php include("header.php") 
+<?php include("../view/header.php") 
 ?>
 <?php if (!empty($results)) { ?>
     <section>
@@ -32,6 +32,6 @@
 <?php } else { ?>
     <p>Sorry, No Results!</p>
 <?php } ?>
-<?php include('status.php') ?><br>
+<?php include('../view/status.php') ?><br>
 <a href=".">Back to ToDo List</a>
-<?php include("footer.php") ?>
+<?php include("../view/footer.php") ?>

@@ -1,8 +1,8 @@
 <?php
 // index.php
-include_once('model/database.php');
-include_once('model/item_db.php');
-include_once('model/category_db.php');
+include_once('../model/database.php');
+include_once('../model/item_db.php');
+include_once('../model/category_db.php');
 
 // Check if the 'removedItemNum' parameter is set in the URL
 if (isset($_GET['removedItemNum'])) {
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['removeItemNum'])) {
 
 // Retrieve ToDo List items from the database
 try {
-    $stmt = $GLOBALS['conn']->prepare("SELECT * FROM todoitems");
+    $stmt = $conn->prepare("SELECT * FROM todoitems");  // Corrected the use of $conn
     $stmt->execute();
     $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -40,13 +40,13 @@ try {
 }
 
 // Include header
-include("header.php");
+include("../view/header.php");
 
 // Include item list
-include("item_list.php");
+include("../view/item_list.php");
 
 // Include footer
-include("footer.php");
+include("../view/footer.php");
 ?>
 
 <!DOCTYPE html>
@@ -79,7 +79,7 @@ include("footer.php");
     ?>
 
     <br><br> <!-- Add two line breaks for more space -->
-    <a href="view/add.php">Add Item</a>
+    <a href="../controller/add.php">Add Item</a>
 
 </body>
 </html>

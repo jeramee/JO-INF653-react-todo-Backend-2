@@ -1,4 +1,4 @@
-<!-- category_db.php -->
+<!-- ../model/category_db.php -->
 <?php
 
 function getCategories() {

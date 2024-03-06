@@ -1,4 +1,4 @@
-<!-- status.php -->
+<!-- ../view/status.php -->
 <?php
 
 $created = filter_input(INPUT_GET, "created", FILTER_UNSAFE_RAW);

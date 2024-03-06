@@ -1,9 +1,7 @@
-<!-- item_db.php -->
+<!-- ../model/item_db.php -->
 <?php
 
-function getToDoItems($category_id = null) {
-    include("database.php");
-
+function getToDoItems($db, $category_id = null) {
     $query = 'SELECT todoitems.*, categories.categoryName 
               FROM todoitems 
               LEFT JOIN categories ON todoitems.categoryID = categories.categoryID';
@@ -25,7 +23,7 @@ function getToDoItems($category_id = null) {
     return $results;
 }
 
-function addToDoItem($title, $description, $category_id) {
+function addToDoItem($db, $title, $description, $category_id) {
     include("database.php");
 
     $query = 'INSERT INTO todoitems (Title, Description, categoryID) 
@@ -39,9 +37,7 @@ function addToDoItem($title, $description, $category_id) {
     $statement->closeCursor();
 }
 
-function removeToDoItem($itemNum) {
-    include("database.php");
-
+function removeToDoItem($db, $itemNum) {
     $query = 'DELETE FROM todoitems WHERE ItemNum = :itemNum';
     
     $statement = $db->prepare($query);

@@ -1,5 +1,5 @@
 <!-- create_todolist.php -->
-<?php include("header.php") ?>
+<?php include("../view/header.php") ?>
 
 <section class="todolist-form-container">
     <!-- Your existing content here -->
@@ -16,4 +16,4 @@
     </form>
 </section>
 
-<?php include("footer.php") ?>
+<?php include("../view/footer.php") ?>

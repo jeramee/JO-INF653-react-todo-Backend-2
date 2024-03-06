@@ -1,4 +1,4 @@
-<!-- database.php -->
+<!-- ../model/database.php -->
 <?php
 
 $dsn = "mysql:host=localhost;dbname=todolist";

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- header.php -->    
+<!-- ../view/header.php -->    
 
 <head>
     <meta charset="UTF-8">

@@ -1,5 +1,5 @@
 </main>
-<!-- footer.php -->
+<!-- ../view/footer.php -->
 </body>
 
 </html>
