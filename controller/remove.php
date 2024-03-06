@@ -11,7 +11,7 @@ try {
         $itemId = $_GET['id'];
 
         // Remove the item from the database
-        $stmt = $conn->prepare("DELETE FROM todoitems WHERE ItemNum = :id");
+        $stmt = $conn->prepare("DELETE FROM todoitems WHERE category_id = :id");
         $stmt->bindParam(':id', $itemId);
         $stmt->execute();
 

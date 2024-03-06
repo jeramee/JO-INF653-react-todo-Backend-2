@@ -1,54 +1,46 @@
 <?php
-// index.php
 include_once('../model/database.php');
 include_once('../model/item_db.php');
 include_once('../model/category_db.php');
 
-// Check if the 'removedItemNum' parameter is set in the URL
-if (isset($_GET['removedItemNum'])) {
-    $removedItemNum = $_GET['removedItemNum'];
-    echo "<p>ItemNum $removedItemNum has been successfully removed.</p>";
+// Check if the form is submitted
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Handle form submission
+    handleFormSubmission();
 }
 
-// Remove item if 'remove' button is clicked
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['removeItemNum'])) {
-    $removedItemNum = $_POST['removeItemNum'];
+// Get categories for the select dropdown
+$categories = getCategories($GLOBALS['conn']);
 
-    // Remove the item from the database
-    try {
-        $stmt = $GLOBALS['conn']->prepare("DELETE FROM todoitems WHERE ItemNum = :id");
-        $stmt->bindParam(':id', $removedItemNum);
-        $stmt->execute();
-    } catch (PDOException $e) {
-        echo "Error removing item: " . $e->getMessage();
-        exit();
+// Get the selected category ID (if any)
+$category_id = isset($_GET['category_id']) ? $_GET['category_id'] : null;
+
+// Get to-do items based on the selected category
+$toDoItems = getToDoItems($GLOBALS['conn'], $category_id);
+
+// Display the form and to-do list
+include('../view/index_view.php');
+
+// Function to handle form submission
+function handleFormSubmission() {
+    if (isset($_POST['category_id'])) {
+        // Extract form data
+        $category_id = $_POST['category_id'];
+
+        // Validate and sanitize input
+        try {
+            // Redirect to index.php with the selected category
+            header("Location: ../controller/index.php?category_id=$category_id");
+            exit();
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            exit();
+        }
     }
-
-    // Redirect back to index.php after removing the item
-    header("Location: index.php?removedItemNum=$removedItemNum");
-    exit();
 }
-
-// Retrieve ToDo List items from the database
-try {
-    $stmt = $conn->prepare("SELECT * FROM todoitems");  // Corrected the use of $conn
-    $stmt->execute();
-    $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-    exit();
-}
-
-// Include header
-include("../view/header.php");
-
-// Include item list
-include("../view/item_list.php");
-
-// Include footer
-include("../view/footer.php");
 ?>
 
+<!-- index_view.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,15 +52,15 @@ include("../view/footer.php");
     <h1>ToDo List</h1>
 
     <?php
-    if (count($items) > 0) {
-        foreach ($items as $item) {
+    if (count($toDoItems) > 0) {
+        foreach ($toDoItems as $item) {
             echo "<div>";
-            echo "<span>{$item['ItemNum']}</span><br>"; // Display ItemNum
+            echo "<span>{$item['category_id']}</span><br>"; // Display category_id
             echo "<span>{$item['Title']}</span>";
             echo "<br><br> <!-- Add two line breaks for more space -->";
             echo "<span>{$item['Description']}</span><br><br>";
             echo "<form action='index.php' method='post'>";
-            echo "<input type='hidden' name='removeItemNum' value='{$item['ItemNum']}'>";
+            echo "<input type='hidden' name='removeItemNum' value='{$item['category_id']}'>";
             echo "<button type='submit' style='color: red;'>X Remove</button>";
             echo "</form>";
             echo "</div>";

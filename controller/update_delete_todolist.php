@@ -7,7 +7,7 @@
     </section>
     <?php
     foreach ($results as $result) {
-        $id = $result["ItemNum"];
+        $id = $result["category_id"];
         $title = $result["Title"];
         $description = $result["Description"];
     ?>
