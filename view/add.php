@@ -1,25 +1,23 @@
 <!-- add.php -->
 
 <?php
-// add.php
-include_once('../model/database.php');
+include_once('../model/item_db.php');
+include_once('../model/category_db.php');
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']) && isset($_POST['description'])) {
     // Extract form data
     $title = $_POST['title'];
     $description = $_POST['description'];
+    $category_id = $_POST['category_id'];
 
     // Validate and sanitize input
     // Insert into the database
     try {
-        $stmt = $GLOBALS['conn']->prepare("INSERT INTO todoitems (Title, Description) VALUES (:title, :description)");
-        $stmt->bindParam(':title', $title);
-        $stmt->bindParam(':description', $description);
-        $stmt->execute();
+        addToDoItem($title, $description, $category_id);
 
         // Redirect back to index.php after adding a new item
-        header("Location: ../index.php");
+        header("Location: ../view/index.php");
         exit();
     } catch (PDOException $e) {
         echo "Error inserting data: " . $e->getMessage();
@@ -40,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']) && isset($_PO
 
     <form action="add.php" method="post">
         <br><br> <!-- Add two line breaks for more space -->
+
         <label for="title">Title:</label>
         <br> <!-- Add a line break for space -->
         <input type="text" id="title" name="title" required maxlength="20">
@@ -49,6 +48,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['title']) && isset($_PO
         <label for="description">Description:</label>
         <br> <!-- Add a line break for space -->
         <input type="text" id="description" name="description" required maxlength="50">
+
+        <br><br> <!-- Add two line breaks for more space -->
+
+        <label for="category_id">Category:</label>
+        <select name="category_id" id="category_id" required>
+            <?php foreach ($categories as $category) : ?>
+                <option value="<?php echo $category['categoryID']; ?>">
+                    <?php echo $category['categoryName']; ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
         <br><br> <!-- Add two line breaks for more space -->
 

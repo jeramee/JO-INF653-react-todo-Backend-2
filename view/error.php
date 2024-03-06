@@ -1,5 +1,5 @@
+<!-- error.php -->
 <?php include("header.php") ?>
-// error.php
 
 <h2>Error</h2>
 <br>

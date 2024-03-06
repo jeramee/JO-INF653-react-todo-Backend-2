@@ -1,8 +1,8 @@
-<!-- index.php -->
-
 <?php
 // index.php
 include_once('model/database.php');
+include_once('model/item_db.php');
+include_once('model/category_db.php');
 
 // Check if the 'removedItemNum' parameter is set in the URL
 if (isset($_GET['removedItemNum'])) {
@@ -38,6 +38,15 @@ try {
     echo "Connection failed: " . $e->getMessage();
     exit();
 }
+
+// Include header
+include("header.php");
+
+// Include item list
+include("item_list.php");
+
+// Include footer
+include("footer.php");
 ?>
 
 <!DOCTYPE html>

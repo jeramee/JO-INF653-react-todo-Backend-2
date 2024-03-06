@@ -1,5 +1,5 @@
+<!-- status.php -->
 <?php
-// status.php
 
 $created = filter_input(INPUT_GET, "created", FILTER_UNSAFE_RAW);
 $updated = filter_input(INPUT_GET, "updated", FILTER_UNSAFE_RAW);
