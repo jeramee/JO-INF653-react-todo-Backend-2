@@ -3,12 +3,13 @@
 
 if (!function_exists('connectToDatabase')) {
     function connectToDatabase() {
-        $dsn = "mysql:host=localhost;dbname=todolist";
+        $host = 'localhost';
+        $dbname = 'todolist';
         $username = 'root';
-        // $password = '1qaz';
+        $password = ''; // Use your actual password if set
 
         try {
-            $conn = new PDO($dsn, $username);
+            $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $conn;
         } catch (PDOException $e) {
@@ -17,6 +18,10 @@ if (!function_exists('connectToDatabase')) {
         }
     }
 }
+
+// Usage in other files:
+$conn = connectToDatabase();
+
 
 // Usage in other files:
 $conn = connectToDatabase();

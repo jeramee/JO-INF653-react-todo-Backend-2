@@ -13,8 +13,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['removeItemNum'])) {
         $itemNum = $_POST['removeItemNum'];
         echo "Before removing item: $itemNum";
-        removeToDoItem($GLOBALS['conn'], $itemNum);
-        echo "After removing item: $itemNum";
+
+        // Attempt to remove the item
+        if (removeToDoItem($GLOBALS['conn'], $itemNum)) {
+            echo "Item successfully removed.";
+        } else {
+            echo "Error removing item.";
+        }
+
+        // Redirect to index.php to display the updated list
+        header("Location: ../controller/index.php");
+        exit();
     }
 
     if (isset($_POST['category_id'])) {
