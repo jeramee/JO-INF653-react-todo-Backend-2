@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo List</title>
+    <script>
+        function showErrorPopup() {
+            alert("Error inserting data: Duplicate item in that category.");
+            // You can use a more sophisticated modal/popup library if needed
+        }
+    </script>
 </head>
 <body>
     <h1>ToDo List</h1>

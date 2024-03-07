@@ -24,16 +24,42 @@ function getToDoItems($conn, $category_id = null) {
     return $results;
 }
 
+// Function to check if a duplicate item exists in the category
+function isDuplicateItem($conn, $title, $category_id) {
+    try {
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM todoitems WHERE Title = :title AND category_id = :category_id");
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':category_id', $category_id);
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
+
+        return $count > 0;
+    } catch (PDOException $e) {
+        throw $e;
+    }
+}
+
+// Function to insert a to-do item
 function addToDoItem($conn, $title, $description, $category_id) {
-    $query = 'INSERT INTO todoitems (Title, Description, category_id) 
-              VALUES (:title, :description, :category_id)';
-    
-    $statement = $conn->prepare($query);
-    $statement->bindParam(":title", $title);
-    $statement->bindParam(":description", $description);
-    $statement->bindParam(":category_id", $category_id, PDO::PARAM_INT);
-    $statement->execute();
-    $statement->closeCursor();
+    try {
+        // Check if the item already exists in the category
+        if (isDuplicateItem($conn, $title, $category_id)) {
+            throw new PDOException("Duplicate item in that category.");
+        }
+
+        // Prepare the SQL statement
+        $stmt = $conn->prepare("INSERT INTO todoitems (Title, Description, category_id) VALUES (:title, :description, :category_id)");
+
+        // Bind parameters
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':category_id', $category_id);
+
+        // Execute the statement
+        $stmt->execute();
+    } catch (PDOException $e) {
+        throw $e; // Re-throw the exception for the calling function to handle
+    }
 }
 
 function removeToDoItem($conn, $itemNum) {

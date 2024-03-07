@@ -36,17 +36,29 @@ include('../view/index_view.php');
 
 // Function to handle form submission
 function handleFormSubmission() {
-    if (isset($_POST['category_id'])) {
+    if (isset($_POST['title']) && isset($_POST['description']) && isset($_POST['category_id'])) {
         // Extract form data
+        $title = $_POST['title'];
+        $description = $_POST['description'];
         $category_id = $_POST['category_id'];
 
         // Validate and sanitize input
         try {
-            // Redirect to index.php with the selected category
-            header("Location: ../controller/index.php?category_id=$category_id");
+            // Insert into the database
+            addToDoItem($GLOBALS['conn'], $title, $description, $category_id);
+
+            // Redirect back to add_view.php after adding a new item
+            header("Location: ../view/add_view.php");
             exit();
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+            // Check for duplicate entry error (error code 1062)
+            if ($e->getCode() == '23000' && strpos($e->getMessage(), '1062') !== false) {
+                // Display custom error message for duplicate entry
+                echo "Error: Duplicate item in that category. Please enter a unique item.";
+            } else {
+                // Display general error message for other exceptions
+                echo "Error inserting data: " . $e->getMessage();
+            }
             exit();
         }
     }
@@ -59,32 +71,38 @@ function handleFormSubmission() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToDo List</title>
+    <link rel="stylesheet" href="../view/css/main.css"> <!-- Include main.css -->
+    <title>Add Item</title>
 </head>
 <body>
-    <h1>ToDo List</h1>
+    <h1>Add Item</h1>
 
-    <?php
-    if (count($toDoItems) > 0) {
-        foreach ($toDoItems as $item) {
-            echo "<div>";
-            echo "<span>{$item['category_id']}</span><br>"; // Display ItemNum
-            echo "<span>{$item['Title']}</span>";
-            echo "<br><br> <!-- Add two line breaks for more space -->";
-            echo "<span>{$item['Description']}</span><br><br>";
-            echo "<form action='index.php' method='post'>";
-            echo "<input type='hidden' name='removeItemNum' value='{$item['category_id']}'>";
-            echo "<button type='submit' style='color: red;'>X Remove</button>";
-            echo "</form>";
-            echo "</div>";
-        }
-    } else {
-        echo "<p>No to-do list items exist yet.</p>";
-    }
-    ?>
+    <!-- Form elements -->
+    <form action="../controller/add.php" method="post">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+        <br>
 
-    <br><br> <!-- Add two line breaks for more space -->
-    <a href="../controller/add.php">Add Item</a>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea>
+        <br>
 
+        <label for="category_id">Category:</label>
+        <select name="category_id" id="category_id">
+            <?php foreach ($categories as $category) : ?>
+                <option value="<?php echo $category['category_id']; ?>">
+                    <?php echo $category['category_name']; ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <br>
+
+        <button type="submit">Add Item</button>
+    </form>
+
+    <!-- Additional content -->
+    <p>Enter the details for the new item and click "Add Item" to add it to your ToDo List.</p>
+    <br><br>
+    <p>You can also <a href="../controller/index.php">go back to the ToDo List</a>.</p>
 </body>
 </html>
