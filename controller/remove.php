@@ -10,8 +10,8 @@ try {
     if (isset($_GET['id'])) {
         $itemId = $_GET['id'];
 
-        // Remove the item from the database
-        $stmt = $conn->prepare("DELETE FROM todoitems WHERE category_id = :id");
+        // Remove the item from the database based on item_id
+        $stmt = $conn->prepare("DELETE FROM todoitems WHERE item_id = :id");
         $stmt->bindParam(':id', $itemId);
         $stmt->execute();
 
@@ -27,5 +27,5 @@ try {
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
-
 ?>
+

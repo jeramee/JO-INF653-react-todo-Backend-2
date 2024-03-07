@@ -19,7 +19,7 @@
             <?php foreach ($toDoItems as $item) : ?>
                 <li>
                     <?php echo $item['Title']; ?> - <?php echo $item['Description']; ?>
-                    (Category: <?php echo $item['category_name'] ? $item['category_name'] : 'None'; ?>)
+                    (Category: <?php echo isset($item['category_name']) ? $item['category_name'] : 'None'; ?>)
                     <a href='controller/index.php?action=remove&id=<?php echo $item['category_id']; ?>'>Remove</a>
                 </li>
             <?php endforeach; ?>

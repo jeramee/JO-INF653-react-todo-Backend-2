@@ -1,5 +1,8 @@
 <!-- index.php -->
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include_once('../model/database.php');
 include_once('../model/item_db.php');
 include_once('../model/category_db.php');
@@ -9,7 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Handle form submissions
     if (isset($_POST['removeItemNum'])) {
         $itemNum = $_POST['removeItemNum'];
+        echo "Before removing item: $itemNum";
         removeToDoItem($GLOBALS['conn'], $itemNum);
+        echo "After removing item: $itemNum";
     }
 
     if (isset($_POST['category_id'])) {

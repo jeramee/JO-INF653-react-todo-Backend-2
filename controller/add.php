@@ -68,8 +68,20 @@ $categories = getCategories($GLOBALS['conn']);
         <textarea id="description" name="description" required></textarea>
         <br>
 
-        <label for="category">Category:</label>
-        <input type="text" id="category" name="category" required>
+        <!-- Dropdown for existing categories -->
+        <label for="category_id">Select Existing Category:</label>
+        <select name="category_id" id="category_id">
+            <?php foreach ($categories as $category) : ?>
+                <option value="<?php echo $category['category_id']; ?>">
+                    <?php echo $category['category_name']; ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <br>
+
+        <!-- Input for new category -->
+        <label for="new_category">New Category:</label>
+        <input type="text" id="new_category" name="new_category">
         <br>
 
         <button type="submit">Add Item</button>

@@ -61,6 +61,8 @@ $categories = getCategories($GLOBALS['conn']);
 <?php
 // Function to handle form submission
 function handleFormSubmission() {
+    echo "Handling form submission...\n"; // Output to the web page
+
     if (isset($_POST['title']) && isset($_POST['description']) && isset($_POST['category_id'])) {
         // Extract form data
         $title = $_POST['title'];
@@ -69,16 +71,22 @@ function handleFormSubmission() {
 
         // Validate and sanitize input
         try {
+            echo "Adding ToDo Item...\n"; // Output to the web page
+
             // Insert into the database
             addToDoItem($GLOBALS['conn'], $title, $description, $category_id);
+
+            echo "ToDo Item added successfully!\n"; // Output to the web page
 
             // Redirect back to add_view.php after adding a new item
             header("Location: ../view/add_view.php");
             exit();
         } catch (PDOException $e) {
-            echo "Error inserting data: " . $e->getMessage();
+            echo "Error inserting data: " . $e->getMessage(); // Output to the web page
             exit();
         }
+    } else {
+        echo "Form data is incomplete.\n"; // Output to the web page
     }
 }
 ?>

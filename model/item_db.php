@@ -1,4 +1,3 @@
-<!-- ../model/item_db.php -->
 <?php
 include("database.php");
 
@@ -63,10 +62,10 @@ function addToDoItem($conn, $title, $description, $category_id) {
 }
 
 function removeToDoItem($conn, $itemNum) {
-    $query = 'DELETE FROM todoitems WHERE category_id = :category_id';
+    $query = 'DELETE FROM todoitems WHERE item_id = :item_id';
     
     $statement = $conn->prepare($query);
-    $statement->bindParam(":category_id", $itemNum, PDO::PARAM_INT);
+    $statement->bindParam(":item_id", $itemNum, PDO::PARAM_INT);
     $statement->execute();
     $statement->closeCursor();
 }

@@ -16,19 +16,25 @@
     <h1>ToDo List</h1>
 
     <!-- Category Filter Form -->
-    <form action='index.php' method='post'>
-        <label for="category_id">Select Category:</label>
-        <select name="category_id" id="category_id">
-            <?php foreach ($categories as $category) : ?>
-                <option value="<?php echo $category['category_id']; ?>">
-                    <?php echo $category['category_name']; ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-        <button type="submit">Filter</button>
-    </form>
+<form action='index.php' method='post'>
+    <label for="category_id">Select Category:</label>
+    <select name="category_id" id="category_id">
+        <?php
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+        $categories = getCategories($GLOBALS['conn']);
+        foreach ($categories as $category) : ?>
+            <option value="<?php echo $category['category_id']; ?>">
+                <?php echo $category['category_name']; ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <button type="submit">Filter</button>
+</form>
 
     <?php
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
     if (count($toDoItems) > 0) {
         foreach ($toDoItems as $item) {
             echo "<div>";
