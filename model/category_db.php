@@ -3,13 +3,13 @@
 
 include("database.php");
 
+// Function to get categories from the database
 function getCategories($conn) {
-    $query = 'SELECT * FROM categories ORDER BY category_id';
+    $query = 'SELECT * FROM categories';
     $statement = $conn->prepare($query);
     $statement->execute();
     $categories = $statement->fetchAll();
     $statement->closeCursor();
-
     return $categories;
 }
 
@@ -37,7 +37,7 @@ function getCategoryByName($conn, $categoryName) {
 }
 
 function addCategory($conn, $category_name) {
-    $query = 'INSERT INTO categories (category_name) VALUES (:category_name)';
+    $query = 'INSERT INTO categories (categoryName) VALUES (:category_name)';
     
     $statement = $conn->prepare($query);
     $statement->bindValue(':category_name', $category_name);

@@ -9,7 +9,8 @@
 <body>
     <h1>ToDo List</h1>
 
-    <form action="../controller/index.php" method="post">
+    <!-- Category Filter Form -->
+    <form action='index.php' method='post'>
         <label for="category_id">Select Category:</label>
         <select name="category_id" id="category_id">
             <?php foreach ($categories as $category) : ?>
@@ -21,19 +22,26 @@
         <button type="submit">Filter</button>
     </form>
 
-    <?php if (count($toDoItems) > 0) : ?>
-        <ul>
-            <?php foreach ($toDoItems as $item) : ?>
-                <li>
-                    <strong><?php echo $item['Title']; ?></strong>
-                    <p><?php echo $item['Description']; ?></p>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    <?php else : ?>
-        <p>No to-do list items exist yet.</p>
-    <?php endif; ?>
+    <?php
+    if (count($toDoItems) > 0) {
+        foreach ($toDoItems as $item) {
+            echo "<div>";
+            echo "<span>{$item['category_id']}</span><br>"; // Display ItemNum
+            echo "<span>{$item['Title']}</span>";
+            echo "<br><br> <!-- Add two line breaks for more space -->";
+            echo "<span>{$item['Description']}</span><br><br>";
+            echo "<form action='index.php' method='post'>";
+            echo "<input type='hidden' name='removeItemNum' value='{$item['category_id']}'>";
+            echo "<button type='submit' style='color: red;'>X Remove</button>";
+            echo "</form>";
+            echo "</div>";
+        }
+    } else {
+        echo "<p>No to-do list items exist yet.</p>";
+    }
+    ?>
 
+    <!-- Add Item Link -->
     <br><br>
     <a href="../controller/add.php">Add Item</a>
 </body>

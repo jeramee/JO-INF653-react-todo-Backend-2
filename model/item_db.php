@@ -44,4 +44,22 @@ function removeToDoItem($conn, $itemNum) {
     $statement->execute();
     $statement->closeCursor();
 }
+
+// item_db.php
+
+/* function getCategories($conn) {
+        try {
+        $query = 'SELECT * FROM categories';
+        $statement = $conn->prepare($query);
+        $statement->execute();
+        $categories = $statement->fetchAll();
+        $statement->closeCursor();
+        return $categories;
+    } catch (PDOException $e) {
+        echo "Error getting categories: " . $e->getMessage();
+        exit();
+    }
+}
+*/
+
 ?>

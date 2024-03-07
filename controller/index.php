@@ -1,3 +1,4 @@
+<!-- index.php -->
 <?php
 include_once('../model/database.php');
 include_once('../model/item_db.php');
@@ -5,8 +6,20 @@ include_once('../model/category_db.php');
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Handle form submission
-    handleFormSubmission();
+    // Handle form submissions
+    if (isset($_POST['removeItemNum'])) {
+        $itemNum = $_POST['removeItemNum'];
+        removeToDoItem($GLOBALS['conn'], $itemNum);
+    }
+
+    if (isset($_POST['category_id'])) {
+        // Extract form data
+        $category_id = $_POST['category_id'];
+
+        // Redirect to index.php with the selected category
+        header("Location: ../controller/index.php?category_id=$category_id");
+        exit();
+    }
 }
 
 // Get categories for the select dropdown
@@ -55,7 +68,7 @@ function handleFormSubmission() {
     if (count($toDoItems) > 0) {
         foreach ($toDoItems as $item) {
             echo "<div>";
-            echo "<span>{$item['category_id']}</span><br>"; // Display category_id
+            echo "<span>{$item['category_id']}</span><br>"; // Display ItemNum
             echo "<span>{$item['Title']}</span>";
             echo "<br><br> <!-- Add two line breaks for more space -->";
             echo "<span>{$item['Description']}</span><br><br>";
